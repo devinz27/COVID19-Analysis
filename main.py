@@ -36,7 +36,7 @@ df = df.fillna(0)
 
 # print(df)
 
-df.to_excel("df.xlsx")
+# df.to_excel("df.xlsx")
 
 # print(df.describe())
 
@@ -44,25 +44,39 @@ len = int(len(df) * 0.8)
 # print(len)
 # print(len)
 
+x = "New cases"
+y = "Effective reproduction number"
+# linear regression between new deaths and active cases
 training = df.iloc[:len]
-trainingx = training["New cases"].values.reshape(-1, 1)
+trainingx = training[x].values.reshape(-1, 1)
 # print(trainingx)
 
-trainingy = training["New deaths"].values.reshape(-1, 1)
+trainingy = training[y].values.reshape(-1, 1)
+
 # print(trainingy)
 
-
+# training set
 ml = LinearRegression()
 ml.fit(trainingx, trainingy)
 predy = ml.predict(trainingx)
 # print(predy)
 
-plt.xlabel("New cases")
-plt.ylabel("New Deaths")
+plt.xlabel(x)
+plt.ylabel(y)
 # plt.figure(figsize=(15, 7))
 plt.scatter(trainingx, trainingy)
 plt.plot(trainingx, predy)
 plt.show()
+
+
+validation = df.iloc[len:]
+validationx = validation[x].values.reshape(-1, 1)
+validationy = validation[y].values.reshape(-1, 1)
+
+# validationg set
+x = LinearRegression()
+x.fit(validationx, validationy)
+ypred = x.predict(validationx)
 
 
 # predicty = ml.predict(validationx)
