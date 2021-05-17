@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import datetime as dt
 from functools import reduce
 from sklearn.linear_model import LinearRegression
 
@@ -35,19 +36,100 @@ df["Total cases"] = df["Total cases"] - 1
 df = df.fillna(0)
 
 # print(df)
+# print(df)
 
-# df.to_excel("df.xlsx")
+df.to_excel("df.xlsx")
 
 # print(df.describe())
 
-len = int(len(df) * 0.8)
-# print(len)
+df["Date"] = pd.to_datetime(df["Date"])
+
+
+# print(monthdf)
+# firstJan = df[(df["Date"].dt.month == 1) &
+#               (df["Date"].dt.year == 2020)]
+# # print(firstJan)
+# firstJan = firstJan.groupby(
+#     [firstJan["Date"].dt.month == 1]).sum().reset_index()
+
+# combined = pd.concat([firstJan])
+# print(combined)
+
+# print(firstJan)
+monthdf = pd.DataFrame(df)
+monthdf["year"] = monthdf["Date"].dt.year
+monthdf["month"] = monthdf["Date"].dt.month
+
+# print(x)
+monthdf = monthdf.groupby(["year", "month"], as_index=False).sum()
+print(monthdf)
+
+# print(firstJan)
+
+
+print("Welcome to my Covid-Analysis program. Please enter two variables to be the axis\n")
+print("New cases (1), 7-day average (2), Total cases (3), New deaths (4), Active cases (5), Hospitalized (6), Effective reproduction number (7), Positive result (%) (8), Total tests done (9), Previous day doses adminstered (10), Total doses adminstered (11), Total fully vaccinated (12)\n")
+x = input("Input for the x axis ")
+y = input("Input for the y axis ")
+
+if x.lower() == "new cases" or x == str(1):
+    x = "New cases"
+elif x.lower() == "7-day average" or x == str(2):
+    x = "7-day average"
+elif x.lower() == "total cases" or x == str(3):
+    x = "Total cases"
+elif x.lower() == "new deaths" or x == str(4):
+    x = "New deaths"
+elif x.lower() == "active cases" or x == str(5):
+    x = "Active cases"
+elif x.lower() == "hospitalized" or x == str(6):
+    x = "Hospitalized"
+elif x.lower() == "effective reproduction number" or x == str(7):
+    x = "Effective reproduction number"
+elif x.lower() == "positive result (%)" or x == str(8):
+    x = "Positive result (%)"
+elif x.lower() == "total tests done" or x == str(9):
+    x = "Total tests done"
+elif x.lower() == "previous day doses adminstered" or x == str(10):
+    x = "Previous day doses adminstered"
+elif x.lower() == " total doses adminstered" or x == str(11):
+    x = "Total doses adminstered"
+elif x.lower() == "total fully vaccinated" or x == str(12):
+    x = "Total fully vaccinated"
+
+if y.lower() == "new cases" or y == str(1):
+    y = "New cases"
+elif y.lower() == "7-day average" or y == str(2):
+    y = "7-day average"
+elif y.lower() == "total cases" or y == str(3):
+    y = "Total cases"
+elif y.lower() == "new deaths" or y == str(4):
+    y = "New deaths"
+elif y.lower() == "active cases" or y == str(5):
+    y = "Active cases"
+elif y.lower() == "hospitalized" or y == str(6):
+    y = "Hospitalized"
+elif y.lower() == "effective reproduction number" or y == str(7):
+    y = "Effective reproduction number"
+elif y.lower() == "positive result (%)" or y == str(8):
+    y = "Positive result (%)"
+elif y.lower() == "total tests done" or y == str(9):
+    y = "Total tests done"
+elif y.lower() == "previous day doses adminstered" or y == str(10):
+    y = "Previous day doses adminstered"
+elif y.lower() == " total doses adminstered" or y == str(11):
+    y = "Total doses adminstered"
+elif y.lower() == "total fully vaccinated" or y == str(12):
+    y = "Total fully vaccinated"
+
+
+# len = int(len(df) * 0.8)
 # print(len)
 
-x = "New cases"
-y = "Effective reproduction number"
+# x = "New cases"
+# y = "Effective reproduction number"
 # linear regression between new deaths and active cases
-training = df.iloc[:len]
+training = df.iloc[:]
 trainingx = training[x].values.reshape(-1, 1)
 # print(trainingx)
 
@@ -59,7 +141,7 @@ trainingy = training[y].values.reshape(-1, 1)
 ml = LinearRegression()
 ml.fit(trainingx, trainingy)
 predy = ml.predict(trainingx)
-# print(predy)
+
 
 plt.xlabel(x)
 plt.ylabel(y)
@@ -69,19 +151,9 @@ plt.plot(trainingx, predy)
 plt.show()
 
 
-validation = df.iloc[len:]
-validationx = validation[x].values.reshape(-1, 1)
-validationy = validation[y].values.reshape(-1, 1)
-
-# validationg set
-x = LinearRegression()
-x.fit(validationx, validationy)
-ypred = x.predict(validationx)
-
-
-# predicty = ml.predict(validationx)
-# print(validationy)
-# print(predicty)
+compare = pd.DataFrame({"Actual": trainingy.flatten(),
+                        "Predicted": predy.flatten()})
+print(compare)
 
 
 # linear regression to predict future values
@@ -90,7 +162,11 @@ ypred = x.predict(validationx)
 # ratios
 
 # COVID-19 Analysis
-# collected covid19 data and manipulated it using python and pandas
+# collected covid19 data and cleaned, explored and manipulated it using python and pandas
+# visualized data in interactiver dashboard in powerbi
+# created different metrics that gave better insights to data by creating different ratios such as ___
+
+# developed linear regression model that helps forecast different metrics selected by the user
 # forcasted __ 30 days in to future using machine learning (linear regression)
 # visualized data in interactiver dashboard in powerbi
 # created different metrics that gave better insights to data by creating different ratios such as ___
