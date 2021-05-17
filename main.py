@@ -35,37 +35,20 @@ df["Total cases"] = df["Total cases"] - 1
 # fill empty values with 0
 df = df.fillna(0)
 
-# print(df)
-# print(df)
-
 df.to_excel("df.xlsx")
+
+print(f'Final Dataframe \n {df}')
 
 # print(df.describe())
 
 df["Date"] = pd.to_datetime(df["Date"])
 
-
-# print(monthdf)
-# firstJan = df[(df["Date"].dt.month == 1) &
-#               (df["Date"].dt.year == 2020)]
-# # print(firstJan)
-# firstJan = firstJan.groupby(
-#     [firstJan["Date"].dt.month == 1]).sum().reset_index()
-
-# combined = pd.concat([firstJan])
-# print(combined)
-
-# print(firstJan)
 monthdf = pd.DataFrame(df)
 monthdf["year"] = monthdf["Date"].dt.year
 monthdf["month"] = monthdf["Date"].dt.month
 
-# print(x)
 monthdf = monthdf.groupby(["year", "month"], as_index=False).sum()
-print(monthdf)
-
-# print(firstJan)
-
+print(f'Monthly Sums \n {monthdf}')
 
 print("Welcome to my Covid-Analysis program. Please enter two variables to be the axis\n")
 print("New cases (1), 7-day average (2), Total cases (3), New deaths (4), Active cases (5), Hospitalized (6), Effective reproduction number (7), Positive result (%) (8), Total tests done (9), Previous day doses adminstered (10), Total doses adminstered (11), Total fully vaccinated (12)\n")
@@ -122,10 +105,6 @@ elif y.lower() == " total doses adminstered" or y == str(11):
 elif y.lower() == "total fully vaccinated" or y == str(12):
     y = "Total fully vaccinated"
 
-
-# len = int(len(df) * 0.8)
-# print(len)
-
 # x = "New cases"
 # y = "Effective reproduction number"
 # linear regression between new deaths and active cases
@@ -134,7 +113,6 @@ trainingx = training[x].values.reshape(-1, 1)
 # print(trainingx)
 
 trainingy = training[y].values.reshape(-1, 1)
-
 # print(trainingy)
 
 # training set
@@ -142,31 +120,15 @@ ml = LinearRegression()
 ml.fit(trainingx, trainingy)
 predy = ml.predict(trainingx)
 
-
 plt.xlabel(x)
 plt.ylabel(y)
+plt.title(f'Linear Regression graph of {x} and {y}')
 # plt.figure(figsize=(15, 7))
-plt.scatter(trainingx, trainingy)
-plt.plot(trainingx, predy)
+plt.scatter(trainingx, trainingy, color="blue")
+plt.plot(trainingx, predy, color="red")
 plt.show()
 
 
 compare = pd.DataFrame({"Actual": trainingy.flatten(),
                         "Predicted": predy.flatten()})
-print(compare)
-
-
-# linear regression to predict future values
-# powerbi
-# create monthly dataset and total everything (ERN cant be summed) ## remove critical threshhold
-# ratios
-
-# COVID-19 Analysis
-# collected covid19 data and cleaned, explored and manipulated it using python and pandas
-# visualized data in interactiver dashboard in powerbi
-# created different metrics that gave better insights to data by creating different ratios such as ___
-
-# developed linear regression model that helps forecast different metrics selected by the user
-# forcasted __ 30 days in to future using machine learning (linear regression)
-# visualized data in interactiver dashboard in powerbi
-# created different metrics that gave better insights to data by creating different ratios such as ___
+print(f'Actual vs Predicted values \n {compare}')
